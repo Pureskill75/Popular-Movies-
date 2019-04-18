@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="poster_thumbnail_detail_activity">detail activity poster thumbnail</string>
+
+    <!-- String resource for detail activity Java-->
+    <string name="release_date">Release Date: %s</string>
+    <string name="user_rating_tv">Rating: %s</string>
+</resources>

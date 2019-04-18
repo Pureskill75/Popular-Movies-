@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Movie detail activity dimensions-->
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="margin_top">10dp</dimen>
+    <dimen name="padding_end">12dp</dimen>
+    <dimen name="padding_bottom">10dp</dimen>
+    <dimen name="padding_start">12dp</dimen>
+    <dimen name="padding_left">12dp</dimen>
+    <dimen name="padding_right">12dp</dimen>
+    <dimen name="image_view_width">200dp</dimen>
+    <dimen name="image_view_height">250dp</dimen>
+    <dimen name="image_layout_margin">5dp</dimen>
+
+</resources>

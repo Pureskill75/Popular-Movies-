@@ -1,0 +1,180 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/image_iv"
+            android:layout_width="@dimen/image_view_width"
+            android:layout_height="@dimen/image_view_height"
+            android:layout_margin="@dimen/image_layout_margin"
+            android:contentDescription="@string/poster_thumbnail_detail_activity"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/release_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="50dp"
+            android:layout_toEndOf="@id/image_iv"
+            android:layout_toRightOf="@id/image_iv"
+            android:textSize="@dimen/text_size"
+            tools:text="2019-01-31" />
+
+
+        <TextView
+            android:id="@+id/user_rating_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/release_date_text_view"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_toRightOf="@id/image_iv"
+            android:textSize="@dimen/text_size"
+            tools:text="User ratings"
+            android:layout_toEndOf="@id/image_iv" />
+
+        <ImageView
+            android:id="@+id/fav_image_view"
+            android:layout_width="42dp"
+            android:layout_height="31dp"
+            android:layout_below="@id/user_rating_text_view"
+            android:layout_toRightOf="@id/image_iv"
+            app:srcCompat="@drawable/ic_star_black_18dp"
+            android:text="favourite"
+            android:layout_toEndOf="@id/image_iv" />
+
+        <TextView
+            android:id="@+id/movie_id_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/fav_image_view"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_toRightOf="@id/image_iv"
+            android:textSize="@dimen/text_size"
+            tools:text="696969"
+            android:layout_toEndOf="@id/image_iv" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/image_iv"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/padding_start"
+            android:paddingLeft="@dimen/padding_left"
+            android:paddingEnd="@dimen/padding_end"
+            android:paddingRight="@dimen/padding_right">
+
+            <TextView
+                android:id="@+id/title_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_bottom"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold"
+                tools:text="Hard to Kill" />
+
+            <TextView
+                android:id="@+id/plot_synopsis_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_top"
+                android:text="Plot synopsis"
+                android:textSize="@dimen/text_size" />
+
+            <View style="@style/Divider" />
+
+
+            <TextView
+                android:id="@+id/trailer_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_top"
+                android:text="Trailer"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+
+            <RelativeLayout
+                android:id="@+id/trailer_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/trailer_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="Play trailer Button"
+                    app:srcCompat="@drawable/ic_play_circle_outline_black_18dp" />
+
+                <TextView
+                    android:id="@+id/play_trailer_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_toEndOf="@id/trailer_image_view"
+                    android:layout_toRightOf="@id/trailer_image_view"
+                    android:text="Play Trailer"
+                    android:textSize="@dimen/text_size" />
+
+
+                <ImageView
+                    android:id="@+id/review_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_below="@id/trailer_image_view"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="Play Trailer Button"
+                    app:srcCompat="@drawable/ic_pencil_outline_black_18dp" />
+
+
+                <TextView
+                    android:id="@+id/review_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/trailer_image_view"
+                    android:layout_marginTop="15dp"
+                    android:layout_toEndOf="@id/review_image_view"
+                    android:layout_toRightOf="@id/review_image_view"
+                    android:text="Read Reviews"
+                    android:textSize="@dimen/text_size" />
+
+
+            </RelativeLayout>
+
+            <View style="@style/Divider" />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</ScrollView>
