@@ -17,6 +17,8 @@ public abstract class MovieDatabase extends RoomDatabase {
 
     private static MovieDatabase INSTANCE;
 
+    public abstract MovieDao movieDao();
+
 
     public static synchronized MovieDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -29,7 +31,7 @@ public abstract class MovieDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract MovieDao movieDao();
+
 
 }
 

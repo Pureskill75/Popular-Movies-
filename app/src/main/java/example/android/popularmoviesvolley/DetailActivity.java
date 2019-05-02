@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +14,6 @@ import com.squareup.picasso.Picasso;
 import example.android.popularmoviesvolley.ImageUtils.Utils;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
-import example.android.popularmoviesvolley.Room.MovieRepository;
 
 import static example.android.popularmoviesvolley.Constants.*;
 
@@ -23,14 +21,12 @@ import static example.android.popularmoviesvolley.Constants.*;
 public class DetailActivity extends AppCompatActivity {
 
 
-
     public static final String KEY_EXAMPLE = "hNCmb-4oXJA";
-    private static final String KEY_ID = "id";
-    private static final String KEY_URL = "key";
-    private static final String KEY_NAME = "name";
+//    private static final String KEY_ID = "id";
+//    private static final String KEY_URL = "key";
+//    private static final String KEY_NAME = "name";
 
     private MovieDatabase movieDatabase;
-    private MovieRepository movieRepository;
 
 
     @Override
@@ -46,7 +42,11 @@ public class DetailActivity extends AppCompatActivity {
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
 
-        // String intents for catching the data (String constants) from Main activity for displaying data in the detail activity
+
+        /*
+        String intents for catching the data (String constants) from Main activity
+        for displaying data in the detail activity
+        */
         Intent intent = getIntent();
         String posterUrl = intent.getStringExtra(EXTRA_URL);
         String title = intent.getStringExtra(TITLE_TEXT);
@@ -54,7 +54,6 @@ public class DetailActivity extends AppCompatActivity {
         String releaseDate = intent.getStringExtra(RELEASE);
         String voteAverage = intent.getStringExtra(VOTE_AVERAGE);
         String movieId = intent.getStringExtra(MOVIE_ID);
-
 
 
         // Detail activity title TextView
@@ -89,30 +88,14 @@ public class DetailActivity extends AppCompatActivity {
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
 
-        mFavourites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                addToFavourites(movies);
-                Toast.makeText(DetailActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
-            }
+        mFavourites.setOnClickListener(v -> {
+            addToFavourites(movies);
+            Toast.makeText(DetailActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
         });
 
-        mPlayTrailer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playTrailer();
-            }
-        });
+        mPlayTrailer.setOnClickListener(v -> playTrailer());
 
-        mReadReviews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "Show Reviews", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
+        mReadReviews.setOnClickListener(v -> Toast.makeText(DetailActivity.this, "Show Reviews", Toast.LENGTH_SHORT).show());
 
     }
 
@@ -120,18 +103,10 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + KEY_EXAMPLE));
         startActivity(intent);
-
     }
-
 
     private void addToFavourites(final Movies movies) {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                movieDatabase.movieDao().insert(new Movies[] {movies});
-            }
-        });
+        AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(new Movies[]{movies}));
     }
-
 
 }

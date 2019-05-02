@@ -14,23 +14,22 @@ import example.android.popularmoviesvolley.Movies;
 @Dao
 public interface MovieDao {
 
+
+    @Query("SELECT * FROM movie_table ORDER BY id")
+    LiveData<List<Movies>> loadAllMovies();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Movies[] movies);
+    void insertMovie(Movies[] movies);
 
     @Delete
-    void delete(Movies[] movies);
+    void deleteMovie(List<Movies> movies);
 
-
-    @Query("DELETE FROM movie_table")
-    void deleteAllMovies();
-
-
-    //This is where we get all movies displayed in the recycler view (COME BACK TO THIS!!)
+    @Delete
+    void deleteAllMovies(List<Movies> movies);
 
     @Query("SELECT * FROM movie_table WHERE id = :id")
     Movies loadMovieById(int id);
 
 
-    @Query("SELECT * FROM movie_table ORDER BY id")
-    LiveData<List<Movies>> getAllMovies();
+
 }

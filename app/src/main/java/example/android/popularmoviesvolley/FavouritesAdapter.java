@@ -1,13 +1,13 @@
 package example.android.popularmoviesvolley;
 
-import android.content.Context;
+
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 
 import com.squareup.picasso.Picasso;
 
@@ -16,46 +16,28 @@ import java.util.List;
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
 
-public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.MoviesViewHolder> {
+public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavViewHolder> {
 
+    private MovieClickListener mListener;
+    private List<Movies> mFavList = new ArrayList<>();
 
-    private Context mContext;
-    private ArrayList<Movies> mMoviesArrayList;
-    private OnItemClickListener mListener;
-
-
-
-
-    public interface OnItemClickListener {
-        void onItemClick(int position);
+    FavouritesAdapter(MovieClickListener mListener) {
+        this.mListener = mListener;
     }
 
-    void setOnItemClickListener(OnItemClickListener listener) {
-        mListener = listener;
-    }
-
-    MyMoviesAdapter(Context context, ArrayList<Movies> MoviesArrayList) {
-        mContext = context;
-        mMoviesArrayList = MoviesArrayList;
-
-
-    }
 
     @NonNull
     @Override
-    public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_layout,
-                parent, false);
+    public FavouritesAdapter.FavViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.grid_layout, viewGroup, false);
+        return new FavViewHolder(itemView, this);
 
-        return new MoviesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MoviesViewHolder holder, int position) {
-        final Movies movie = mMoviesArrayList.get(position);
+    public void onBindViewHolder(@NonNull FavViewHolder holder, int position) {
 
-
-
+        final Movies movie = mFavList.get(position);
 
         //load the appropriate Image view using Utils
         String posterUrl = Utils.buildPosterUrl(movie.getPosterPath());
@@ -69,41 +51,48 @@ public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.Movies
                 .error(R.drawable.ic_launcher_foreground)
                 .into(holder.mImageView);
 
-
     }
-
 
 
     @Override
     public int getItemCount() {
-        return mMoviesArrayList.size();
+        return mFavList.size();
     }
 
 
-    class MoviesViewHolder extends RecyclerView.ViewHolder {
+    void getFavouriteList(List<Movies> movies) {
+        this.mFavList.clear();
+        if (movies != null) {
+            mFavList.addAll(movies);
+        }
+        notifyDataSetChanged();
+    }
+
+
+    class FavViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mImageView;
 
 
-        MoviesViewHolder(View itemView) {
-            super(itemView);
+        final FavouritesAdapter favouritesAdapter;
 
-            //grid layout image view position
+
+        private FavViewHolder(@NonNull View itemView, FavouritesAdapter favouritesAdapter) {
+            super(itemView);
+            this.favouritesAdapter = favouritesAdapter;
             mImageView = itemView.findViewById(R.id.image_view_one);
 
             itemView.setOnClickListener(v -> {
                 if (mListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        mListener.onItemClick(position);
+                        mListener.onMovieClicked(position);
                     }
                 }
             });
-
-
         }
-
     }
+
 
 }
 

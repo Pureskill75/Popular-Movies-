@@ -5,4 +5,5 @@
     <!-- String resource for detail activity Java-->
     <string name="release_date">Release Date: %s</string>
     <string name="user_rating_tv">Rating: %s</string>
+    <string name="Grid_iv">Grid_iv_poster</string>
 </resources>
