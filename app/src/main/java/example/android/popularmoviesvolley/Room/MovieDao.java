@@ -30,6 +30,4 @@ public interface MovieDao {
     @Query("SELECT * FROM movie_table WHERE id = :id")
     Movies loadMovieById(int id);
 
-
-
 }

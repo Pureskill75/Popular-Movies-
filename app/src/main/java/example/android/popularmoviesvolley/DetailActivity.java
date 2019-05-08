@@ -8,8 +8,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
 import example.android.popularmoviesvolley.Room.AppExecutors;
@@ -21,10 +36,13 @@ import static example.android.popularmoviesvolley.Constants.*;
 public class DetailActivity extends AppCompatActivity {
 
 
-    public static final String KEY_EXAMPLE = "hNCmb-4oXJA";
-//    private static final String KEY_ID = "id";
-//    private static final String KEY_URL = "key";
-//    private static final String KEY_NAME = "name";
+
+    private static final String KEY_ID = "id";
+    private static final String KEY_URL = "key";
+    private static final String KEY_NAME = "name";
+    private RequestQueue mRequestQueue;
+
+    private List<TrailerRequest> mTrailerList = new ArrayList<>();
 
     private MovieDatabase movieDatabase;
 
@@ -41,6 +59,12 @@ public class DetailActivity extends AppCompatActivity {
 
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
+
+
+
+        mTrailerList = new ArrayList<>();
+        extractTrailer();
+        mRequestQueue = Volley.newRequestQueue(this);
 
 
         /*
@@ -84,27 +108,91 @@ public class DetailActivity extends AppCompatActivity {
         voteAverageTextView.setText(String.format(getString(R.string.user_rating_tv), voteAverage));
         movieIdTextView.setText(movieId);
 
-
+        //An instance of the Movie object
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
+        TrailerRequest trailerRequest = new TrailerRequest(KEY_ID, KEY_URL, KEY_NAME);
 
         mFavourites.setOnClickListener(v -> {
             addToFavourites(movies);
             Toast.makeText(DetailActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
         });
 
-        mPlayTrailer.setOnClickListener(v -> playTrailer());
+
+        mPlayTrailer.setOnClickListener(v -> {
+            playTrailer(trailerRequest);
+        });
 
         mReadReviews.setOnClickListener(v -> Toast.makeText(DetailActivity.this, "Show Reviews", Toast.LENGTH_SHORT).show());
 
     }
 
-    private void playTrailer() {
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + KEY_EXAMPLE));
-        startActivity(intent);
+    // network call for Trailers
+    private void extractTrailer() {
+
+        //https://api.themoviedb.org/3/movie/157336/videos?api_key=###
+
+        Intent intent = getIntent();
+        String movieId = intent.getStringExtra(Constants.MOVIE_ID);
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .authority("api.themoviedb.org/3/movie/")
+                .appendPath(movieId)
+                .appendPath("videos?")
+                .appendQueryParameter("api_key", BuildConfig.ApiKey);
+
+        String myUrl = builder.build().toString();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, myUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("results");
+
+                            mTrailerList.clear();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject results = jsonArray.getJSONObject(i);
+                                //Get json data as strings
+                                String idNumber = results.optString(KEY_ID);
+                                String movieKey = results.optString(KEY_URL);
+                                String movieName = results.optString(KEY_NAME);
+
+                                mTrailerList.add(new TrailerRequest(idNumber, movieKey, movieName));
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                mTrailerList =null;
+
+            }
+        });
+
+        mRequestQueue.add(request);
+
     }
 
+    private void playTrailer(TrailerRequest trailerRequest) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailerRequest.getmKey()));
+        startActivity(intent);
+
+
+    }
+
+
+    //add movie to favourite list/ room database
     private void addToFavourites(final Movies movies) {
         AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(new Movies[]{movies}));
     }

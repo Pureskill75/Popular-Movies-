@@ -14,4 +14,5 @@ class Constants {
     static final String VOTE_AVERAGE = "vote_average";
     static final String MOVIE_ID = "id";
     static final String PRIMARY_KEY = "primary_key";
+    static final String COMPLETE_URL = "https://api.themoviedb.org/3/movie/157336/videos?api_key=030fd31f68fb1124416af6b9240b2f31";
 }

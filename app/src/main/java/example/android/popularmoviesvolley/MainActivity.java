@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 
 import com.android.volley.NetworkError;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     private final String SORT_KEY = "SORT_KEY";
     private final String LIST_STATE = "LIST_STATE";
     private String sortOrder = Constants.POPULAR_URL;
+    Toolbar toolbar;
 
 
     @Override
@@ -68,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
         mMoviesList = new ArrayList<>();
         favouritesAdapter = new FavouritesAdapter(this);
         myMoviesAdapter = new MyMoviesAdapter(this, mMoviesList);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         //Instance of database
         database = MovieDatabase.getInstance(getApplicationContext());
@@ -162,6 +168,9 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     }
 
 
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -171,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
                 setTitle("Most Popular");
                 // return Most Popular Movies list from API
                 sortOrder = parseMovieJSON(Constants.POPULAR_URL);
+
 
                 break;
 
@@ -189,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
 
             case R.id.delete:
+
                 showDeleteConfirmationDialog();
                 break;
 
@@ -209,10 +220,13 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
     private void deleteFavourites() {
 
+
+
         if (mFavList.size() > 0) {
             // Remove all favourites from DB
             AppExecutors.getInstance().diskIO().execute(() -> database.movieDao().deleteMovie(mFavList));
             Toast.makeText(this, "Movies deleted", Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(this, "Favourite List is Empty", Toast.LENGTH_SHORT).show();
         }
@@ -303,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     }
 
 
-    // A reference to the ConnectivityManager to check state of network connectivity mobile and wifi
+    // A reference to the ConnectivityManager to check state of network connectivity (Mobile and wifi).
     private boolean checkConnection() {
 
         boolean wifiConnected = false;

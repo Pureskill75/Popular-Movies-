@@ -28,7 +28,6 @@
         android:icon="@drawable/ic_action_delete"
         android:visible="true"
         app:showAsAction="always"
-
         android:title="" />
 
 </menu>
