@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     private MyMoviesAdapter myMoviesAdapter;
     private FavouritesAdapter favouritesAdapter;
     private ArrayList<Movies> mMoviesList;
-    private RequestQueue mRequestQueue;
+    public static RequestQueue mRequestQueue;
     private List<Movies> mFavList = new ArrayList<>();
     private MovieDatabase database;
     private final String SORT_KEY = "SORT_KEY";
@@ -61,15 +61,16 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mRecyclerView.setAdapter(myMoviesAdapter);
-        mRecyclerView.setAdapter(favouritesAdapter);
+
         mMoviesList = new ArrayList<>();
-        favouritesAdapter = new FavouritesAdapter(this);
         myMoviesAdapter = new MyMoviesAdapter(this, mMoviesList);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setAdapter(myMoviesAdapter);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        favouritesAdapter = new FavouritesAdapter(this);
+        mRecyclerView.setAdapter(favouritesAdapter);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

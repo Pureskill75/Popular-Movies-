@@ -8,21 +8,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.squareup.picasso.Picasso;
+
+import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,21 +27,21 @@ import example.android.popularmoviesvolley.ImageUtils.Utils;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
 
-import static example.android.popularmoviesvolley.Constants.*;
+import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
 
 public class DetailActivity extends AppCompatActivity {
 
 
-
     private static final String KEY_ID = "id";
     private static final String KEY_URL = "key";
     private static final String KEY_NAME = "name";
-    private RequestQueue mRequestQueue;
+
 
     private List<TrailerRequest> mTrailerList = new ArrayList<>();
 
     private MovieDatabase movieDatabase;
+
 
 
     @Override
@@ -60,23 +57,20 @@ public class DetailActivity extends AppCompatActivity {
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
 
-
-
         mTrailerList = new ArrayList<>();
         extractTrailer();
-        mRequestQueue = Volley.newRequestQueue(this);
-
+        MainActivity.mRequestQueue = Volley.newRequestQueue(this);
 
         /*
         String intents for catching the data (String constants) from Main activity
         for displaying data in the detail activity
         */
         Intent intent = getIntent();
-        String posterUrl = intent.getStringExtra(EXTRA_URL);
-        String title = intent.getStringExtra(TITLE_TEXT);
-        String overview = intent.getStringExtra(OVERVIEW_TEXT);
-        String releaseDate = intent.getStringExtra(RELEASE);
-        String voteAverage = intent.getStringExtra(VOTE_AVERAGE);
+        String posterUrl = intent.getStringExtra(Constants.EXTRA_URL);
+        String title = intent.getStringExtra(Constants.TITLE_TEXT);
+        String overview = intent.getStringExtra(Constants.OVERVIEW_TEXT);
+        String releaseDate = intent.getStringExtra(Constants.RELEASE);
+        String voteAverage = intent.getStringExtra(Constants.VOTE_AVERAGE);
         String movieId = intent.getStringExtra(MOVIE_ID);
 
 
@@ -119,36 +113,39 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-        mPlayTrailer.setOnClickListener(v -> {
-            playTrailer(trailerRequest);
-        });
+        mPlayTrailer.setOnClickListener(v -> playTrailer(trailerRequest));
 
         mReadReviews.setOnClickListener(v -> Toast.makeText(DetailActivity.this, "Show Reviews", Toast.LENGTH_SHORT).show());
 
     }
 
 
-    // network call for Trailers
     private void extractTrailer() {
+
+        Intent intent = getIntent();
+        String movieId = intent.getStringExtra(MOVIE_ID);
 
         //https://api.themoviedb.org/3/movie/157336/videos?api_key=###
 
-        Intent intent = getIntent();
-        String movieId = intent.getStringExtra(Constants.MOVIE_ID);
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https")
-                .authority("api.themoviedb.org/3/movie/")
-                .appendPath(movieId)
-                .appendPath("videos?")
-                .appendQueryParameter("api_key", BuildConfig.ApiKey);
+//        Uri.Builder builder = new Uri.Builder();
+//        builder.scheme("http")
+//                .authority("api.themoviedb.org")
+//                .appendPath("3")
+//                .appendPath("movie")
+//                .appendPath(movieId)
+//                .appendPath("videos")
+//                .appendQueryParameter("api_key", BuildConfig.ApiKey);
+//
+//        String url = builder.build().toString();
 
-        String myUrl = builder.build().toString();
+       String url = "http://api.themoviedb.org/3/movie/299534/videos?api_key=030fd31f68fb1124416af6b9240b2f31";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, myUrl, null,
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         try {
                             JSONArray jsonArray = response.getJSONArray("results");
 
@@ -170,24 +167,21 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
-
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-                mTrailerList =null;
-
+            public void onErrorResponse(VolleyError error) {
+                mTrailerList = null;
+                error.printStackTrace();
             }
         });
-
-        mRequestQueue.add(request);
+        MainActivity.mRequestQueue.add(request);
 
     }
+
 
     private void playTrailer(TrailerRequest trailerRequest) {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailerRequest.getmKey()));
         startActivity(intent);
-
 
     }
 
