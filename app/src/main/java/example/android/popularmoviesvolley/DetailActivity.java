@@ -141,26 +141,27 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     private void extractTrailer() {
 
-//        Intent intent = getIntent();
-//        String movieId = intent.getStringExtra(MOVIE_ID);
-//
-//        //https://api.themoviedb.org/3/movie/157336/videos?api_key=###
-//
-//        Uri.Builder builder = new Uri.Builder();
-//        builder.scheme("http")
-//                .authority("api.themoviedb.org")
-//                .appendPath("3")
-//                .appendPath("movie")
-//                .appendPath(movieId)
-//                .appendPath("videos")
-//                .appendQueryParameter("api_key", BuildConfig.ApiKey);
-//
-//        String url = builder.build().toString();
+
+        //https://api.themoviedb.org/3/movie/157336/videos?api_key=###
+
+        Intent intent = getIntent();
+        String movieId = intent.getStringExtra(MOVIE_ID);
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("api.themoviedb.org")
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(movieId)
+                .appendPath("videos")
+                .appendQueryParameter("api_key", BuildConfig.ApiKey);
+
+        String url = builder.build().toString();
 
 
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,COMPLETE_URL, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
