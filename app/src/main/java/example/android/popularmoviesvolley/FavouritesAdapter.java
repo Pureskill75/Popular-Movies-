@@ -71,8 +71,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     class FavViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mImageView;
-
-
         final FavouritesAdapter favouritesAdapter;
 
 

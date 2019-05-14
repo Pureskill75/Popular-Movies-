@@ -1,33 +1,29 @@
 package example.android.popularmoviesvolley;
 
-public class TrailerRequest {
+class TrailerRequest {
 
-
-    private String mId;
 
     private String mKey, mName;
 
-    public TrailerRequest(String idNumber, String movieKey, String movieName){
-        this.mId = idNumber;
-        this.mKey =movieKey;
-        this.mName= movieName;
+    TrailerRequest(String movieKey, String movieName) {
+        this.mKey = movieKey;
+        this.mName = movieName;
     }
 
 
-
-    public String getmId() {
-        return mId;
-    }
-
-    public String getmKey() {
+    String getmKey() {
         return mKey;
     }
 
-    public void getmName(String mName) {
-        this.mName = mName;
+    String getmName() {
+        return mName;
     }
 
-    public String getmName() {
-        return mName;
+    public void setmKey(String mKey) {
+        this.mKey = mKey;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
     }
 }

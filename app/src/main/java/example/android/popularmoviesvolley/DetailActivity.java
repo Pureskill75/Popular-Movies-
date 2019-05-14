@@ -1,9 +1,12 @@
 package example.android.popularmoviesvolley;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,25 +24,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.List;
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
 
+import static example.android.popularmoviesvolley.Constants.COMPLETE_URL;
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements TrailerClickListener {
 
 
-    private static final String KEY_ID = "id";
-    private static final String KEY_URL = "key";
-    private static final String KEY_NAME = "name";
+
+    private TrailerAdapter trailerAdapter;
+    private ArrayList<TrailerRequest> mTrailerList;
+    private final String KEY_NAME = "name";
+    private final String KEY_URL = "key";
 
 
-    private List<TrailerRequest> mTrailerList = new ArrayList<>();
-
+    RecyclerView trailerRecyclerView;
     private MovieDatabase movieDatabase;
 
 
@@ -51,14 +55,24 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.image_iv);
         ImageView mFavourites = findViewById(R.id.fav_image_view);
-        ImageView mPlayTrailer = findViewById(R.id.trailer_image_view);
+        ImageView mPlayTrailer = findViewById(R.id.trailer_play_iv);
         ImageView mReadReviews = findViewById(R.id.review_image_view);
+        TextView mTrailerTitle = findViewById(R.id.trailer_title);
+
+
+        mTrailerList = new ArrayList<>();
+        trailerAdapter = new TrailerAdapter(this);
+        trailerRecyclerView = findViewById(R.id.trailers_recycler_view);
+        trailerRecyclerView.setAdapter(trailerAdapter);
+        trailerAdapter.getTrailerList(mTrailerList);
 
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
 
         mTrailerList = new ArrayList<>();
+
         extractTrailer();
+
         MainActivity.mRequestQueue = Volley.newRequestQueue(this);
 
         /*
@@ -102,10 +116,15 @@ public class DetailActivity extends AppCompatActivity {
         voteAverageTextView.setText(String.format(getString(R.string.user_rating_tv), voteAverage));
         movieIdTextView.setText(movieId);
 
+
         //An instance of the Movie object
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
-        TrailerRequest trailerRequest = new TrailerRequest(KEY_ID, KEY_URL, KEY_NAME);
+
+        final TrailerRequest trailerRequest = new TrailerRequest(KEY_NAME, KEY_URL);
+        mTrailerTitle.setText(trailerRequest.getmName());
+
+
 
         mFavourites.setOnClickListener(v -> {
             addToFavourites(movies);
@@ -115,18 +134,18 @@ public class DetailActivity extends AppCompatActivity {
 
         mPlayTrailer.setOnClickListener(v -> playTrailer(trailerRequest));
 
-        mReadReviews.setOnClickListener(v -> Toast.makeText(DetailActivity.this, "Show Reviews", Toast.LENGTH_SHORT).show());
-
+        mReadReviews.setOnClickListener(v ->
+                openReviews());
     }
 
 
     private void extractTrailer() {
 
-        Intent intent = getIntent();
-        String movieId = intent.getStringExtra(MOVIE_ID);
-
-        //https://api.themoviedb.org/3/movie/157336/videos?api_key=###
-
+//        Intent intent = getIntent();
+//        String movieId = intent.getStringExtra(MOVIE_ID);
+//
+//        //https://api.themoviedb.org/3/movie/157336/videos?api_key=###
+//
 //        Uri.Builder builder = new Uri.Builder();
 //        builder.scheme("http")
 //                .authority("api.themoviedb.org")
@@ -138,11 +157,10 @@ public class DetailActivity extends AppCompatActivity {
 //
 //        String url = builder.build().toString();
 
-       String url = "http://api.themoviedb.org/3/movie/299534/videos?api_key=030fd31f68fb1124416af6b9240b2f31";
 
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,COMPLETE_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -154,13 +172,17 @@ public class DetailActivity extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject results = jsonArray.getJSONObject(i);
                                 //Get json data as strings
-                                String idNumber = results.optString(KEY_ID);
-                                String movieKey = results.optString(KEY_URL);
-                                String movieName = results.optString(KEY_NAME);
+                                String movieKey = results.optString("key");
+                                String movieName = results.optString("name");
 
-                                mTrailerList.add(new TrailerRequest(idNumber, movieKey, movieName));
+                                mTrailerList.add(new TrailerRequest( movieKey, movieName));
 
                             }
+                            trailerAdapter = new TrailerAdapter(DetailActivity.this);
+                            trailerRecyclerView.setAdapter(trailerAdapter);
+                            trailerAdapter.notifyDataSetChanged();
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -180,8 +202,16 @@ public class DetailActivity extends AppCompatActivity {
 
     private void playTrailer(TrailerRequest trailerRequest) {
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailerRequest.getmKey()));
-        startActivity(intent);
+        final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
+        final String YOU_TUBE_APP_URL = "vnd.youtube:";
+
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + trailerRequest.getmKey()));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + trailerRequest.getmKey()));
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException e) {
+            startActivity(webIntent);
+        }
 
     }
 
@@ -191,4 +221,14 @@ public class DetailActivity extends AppCompatActivity {
         AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(new Movies[]{movies}));
     }
 
+
+    private void openReviews (){
+        Intent reviewsIntent = new Intent(this, reviews.class);
+        startActivity(reviewsIntent);
+    }
+
+    @Override
+    public void onTrailerClicked(TrailerRequest trailerRequest) {
+
+    }
 }

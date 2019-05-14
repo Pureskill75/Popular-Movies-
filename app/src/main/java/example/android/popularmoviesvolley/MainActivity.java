@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     Toolbar toolbar;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,13 +92,15 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
         setupViewModel();
 
+
+
     }
 
 
     // parse Json using volley to make network call
     private String parseMovieJSON(final String url) {
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null,
                 response -> {
 
 
@@ -119,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
 
                             mMoviesList.add(new Movies(movie_id, posterPath, originalTitle, overview, releaseDate, voteAverage));
-
                         }
 
 

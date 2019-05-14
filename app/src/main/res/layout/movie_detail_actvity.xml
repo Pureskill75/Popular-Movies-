@@ -6,7 +6,7 @@
     android:layout_height="fill_parent">
 
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -118,8 +118,15 @@
                 android:layout_height="wrap_content">
 
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/trailers_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_centerInParent="true"/>
+
+
                 <ImageView
-                    android:id="@+id/trailer_image_view"
+                    android:id="@+id/trailer_play_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="38dp"
                     android:layout_alignParentStart="true"
@@ -131,27 +138,35 @@
                     app:srcCompat="@drawable/ic_play_circle_outline_black_18dp" />
 
                 <TextView
-                    android:id="@+id/play_trailer_text_view"
+                    android:id="@+id/trailer_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:layout_toEndOf="@id/trailer_image_view"
-                    android:layout_toRightOf="@id/trailer_image_view"
-                    android:text="Play Trailer"
+                    android:layout_toEndOf="@id/trailer_play_iv"
+                    android:layout_toRightOf="@id/trailer_play_iv"
+                    tools:text="Avengers"
                     android:textSize="@dimen/text_size" />
 
+
+            </RelativeLayout>
+
+            <View style="@style/Divider" />
+
+            <RelativeLayout
+                android:id="@+id/reviews_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/review_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:layout_below="@id/trailer_image_view"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_marginStart="0dp"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="10dp"
-                    android:contentDescription="Play Trailer Button"
+                    android:contentDescription="Review View"
                     app:srcCompat="@drawable/ic_pencil_outline_black_18dp" />
 
 
@@ -159,7 +174,6 @@
                     android:id="@+id/review_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/trailer_image_view"
                     android:layout_marginTop="15dp"
                     android:layout_toEndOf="@id/review_image_view"
                     android:layout_toRightOf="@id/review_image_view"
@@ -168,8 +182,6 @@
 
 
             </RelativeLayout>
-
-            <View style="@style/Divider" />
 
 
         </LinearLayout>
