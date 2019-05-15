@@ -29,7 +29,6 @@ import example.android.popularmoviesvolley.ImageUtils.Utils;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
 
-import static example.android.popularmoviesvolley.Constants.COMPLETE_URL;
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
 
@@ -64,6 +63,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         trailerAdapter = new TrailerAdapter(this);
         trailerRecyclerView = findViewById(R.id.trailers_recycler_view);
         trailerRecyclerView.setAdapter(trailerAdapter);
+        trailerRecyclerView.setHasFixedSize(true);
+        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+
         trailerAdapter.getTrailerList(mTrailerList);
 
         //Instance of database
@@ -173,16 +175,15 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject results = jsonArray.getJSONObject(i);
                                 //Get json data as strings
-                                String movieKey = results.optString("key");
-                                String movieName = results.optString("name");
+                                String movie_key = results.optString("key");
+                                String movie_name = results.optString("name");
 
-                                mTrailerList.add(new TrailerRequest( movieKey, movieName));
+                                mTrailerList.add(new TrailerRequest( movie_key, movie_name));
 
                             }
                             trailerAdapter = new TrailerAdapter(DetailActivity.this);
                             trailerRecyclerView.setAdapter(trailerAdapter);
                             trailerAdapter.notifyDataSetChanged();
-
 
 
                         } catch (JSONException e) {
@@ -202,6 +203,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
 
     private void playTrailer(TrailerRequest trailerRequest) {
+
 
         final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
         final String YOU_TUBE_APP_URL = "vnd.youtube:";
@@ -232,4 +234,5 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     public void onTrailerClicked(TrailerRequest trailerRequest) {
 
     }
+
 }

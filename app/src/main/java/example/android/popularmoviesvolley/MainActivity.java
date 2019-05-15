@@ -225,8 +225,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
     private void deleteFavourites() {
 
-
-
         if (mFavList.size() > 0) {
             // Remove all favourites from DB
             AppExecutors.getInstance().diskIO().execute(() -> database.movieDao().deleteMovie(mFavList));

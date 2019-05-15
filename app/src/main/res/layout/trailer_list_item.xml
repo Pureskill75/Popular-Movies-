@@ -29,30 +29,4 @@
         android:textSize="@dimen/text_size" />
 
 
-    <ImageView
-        android:id="@+id/review_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_below="@id/trailer_image_view"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:contentDescription="Play Trailer Button"
-        app:srcCompat="@drawable/ic_pencil_outline_black_18dp" />
-
-
-    <TextView
-        android:id="@+id/review_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/trailer_image_view"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@id/review_image_view"
-        android:layout_toRightOf="@id/review_image_view"
-        android:text="Read Reviews"
-        android:textSize="@dimen/text_size" />
-
-
 </RelativeLayout>
