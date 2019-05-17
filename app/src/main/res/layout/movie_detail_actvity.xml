@@ -42,20 +42,20 @@
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="@dimen/margin_top"
+            android:layout_toEndOf="@id/image_iv"
             android:layout_toRightOf="@id/image_iv"
             android:textSize="@dimen/text_size"
-            tools:text="User ratings"
-            android:layout_toEndOf="@id/image_iv" />
+            tools:text="User ratings" />
 
         <ImageView
             android:id="@+id/fav_image_view"
             android:layout_width="42dp"
             android:layout_height="31dp"
             android:layout_below="@id/user_rating_text_view"
+            android:layout_toEndOf="@id/image_iv"
             android:layout_toRightOf="@id/image_iv"
-            app:srcCompat="@drawable/ic_star_black_18dp"
             android:text="favourite"
-            android:layout_toEndOf="@id/image_iv" />
+            app:srcCompat="@drawable/ic_star_black_18dp" />
 
         <TextView
             android:id="@+id/movie_id_tv"
@@ -65,10 +65,10 @@
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="@dimen/margin_top"
+            android:layout_toEndOf="@id/image_iv"
             android:layout_toRightOf="@id/image_iv"
             android:textSize="@dimen/text_size"
-            tools:text="696969"
-            android:layout_toEndOf="@id/image_iv" />
+            tools:text="696969" />
 
 
         <LinearLayout
@@ -111,44 +111,50 @@
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
 
-
-            <RelativeLayout
-                android:id="@+id/trailer_container"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/trailers_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"/>
-
-
-                <ImageView
-                    android:id="@+id/trailer_play_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="Play trailer Button"
-                    app:srcCompat="@drawable/ic_play_circle_outline_black_18dp" />
-
-                <TextView
-                    android:id="@+id/trailer_title"
+                <RelativeLayout
+                    android:id="@+id/trailer_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_toEndOf="@id/trailer_play_iv"
-                    android:layout_toRightOf="@id/trailer_play_iv"
-                    tools:text="Avengers"
-                    android:textSize="@dimen/text_size" />
+                    android:orientation="vertical">
 
 
-            </RelativeLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/trailers_recycler_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+
+                    <ImageView
+                        android:id="@+id/trailer_play_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="10dp"
+                        android:contentDescription="Play trailer Button"
+                        app:srcCompat="@drawable/ic_play_circle_outline_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/trailer_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/trailer_play_image"
+                        android:layout_marginTop="15dp"
+                        android:textSize="@dimen/text_size"
+                        tools:text="Avengers"
+                        android:layout_toEndOf="@id/trailer_play_image" />
+
+
+                </RelativeLayout>
+
+
+            </android.support.v4.widget.NestedScrollView>
+
 
             <View style="@style/Divider" />
 

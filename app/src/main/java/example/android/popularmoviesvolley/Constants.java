@@ -16,4 +16,6 @@ class Constants {
     static final String MOVIE_ID = "id";
     static final String COMPLETE_URL = "http://api.themoviedb.org/3/movie/299534/videos?api_key=030fd31f68fb1124416af6b9240b2f31";
     static final String VIDEO_ENDPOINT = "videos?api_key=030fd31f68fb1124416af6b9240b2f31";
+    static final String KEY_URL = "key";
+    static final String KEY_NAME = "name";
 }

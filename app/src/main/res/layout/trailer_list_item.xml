@@ -1,32 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/trailer_container"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView02"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
 
-    <ImageView
-        android:id="@+id/trailer_image_view"
+    <RelativeLayout
+        android:id="@+id/trailer_container"
         android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:contentDescription="Play trailer Button"
-        app:srcCompat="@drawable/ic_play_circle_outline_black_18dp" />
-
-    <TextView
-        android:id="@+id/trailer_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@id/trailer_image_view"
-        android:layout_toRightOf="@id/trailer_image_view"
-        android:text="Play Trailer"
-        android:textSize="@dimen/text_size" />
+        android:layout_height="wrap_content">
 
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/trailer_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="70dp"
+            android:textSize="@dimen/text_size"
+            tools:text="Avengers" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

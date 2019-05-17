@@ -54,7 +54,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
         ImageView imageView = findViewById(R.id.image_iv);
         ImageView mFavourites = findViewById(R.id.fav_image_view);
-        ImageView mPlayTrailer = findViewById(R.id.trailer_play_iv);
+        ImageView mPlayTrailer = findViewById(R.id.trailer_play_image);
         ImageView mReadReviews = findViewById(R.id.review_image_view);
         TextView mTrailerTitle = findViewById(R.id.trailer_title);
 
@@ -66,14 +66,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         trailerRecyclerView.setHasFixedSize(true);
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
 
-        trailerAdapter.getTrailerList(mTrailerList);
 
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
 
-        mTrailerList = new ArrayList<>();
 
         extractTrailer();
+
+
 
         MainActivity.mRequestQueue = Volley.newRequestQueue(this);
 
@@ -123,8 +123,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
 
-        final TrailerRequest trailerRequest = new TrailerRequest(KEY_NAME, KEY_URL);
-        mTrailerTitle.setText(trailerRequest.getmName());
+        final TrailerRequest trailerRequest = new TrailerRequest(KEY_URL,KEY_NAME);
+
 
 
 
@@ -134,7 +134,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         });
 
 
-        mPlayTrailer.setOnClickListener(v -> playTrailer(trailerRequest));
+        mPlayTrailer.setOnClickListener(v -> playTrailer(trailerRequest)
+
+        );
+
 
         mReadReviews.setOnClickListener(v ->
                 openReviews());
@@ -183,6 +186,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                             }
                             trailerAdapter = new TrailerAdapter(DetailActivity.this);
                             trailerRecyclerView.setAdapter(trailerAdapter);
+                            trailerAdapter.getTrailerList(mTrailerList);
                             trailerAdapter.notifyDataSetChanged();
 
 
@@ -208,8 +212,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
         final String YOU_TUBE_APP_URL = "vnd.youtube:";
 
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + trailerRequest.getmKey()));
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + trailerRequest.getmKey()));
+        String key = trailerRequest.getKey();
+
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + key));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + key));
         try {
             startActivity(appIntent);
         } catch (ActivityNotFoundException e) {
@@ -232,6 +238,19 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     @Override
     public void onTrailerClicked(TrailerRequest trailerRequest) {
+
+        final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
+        final String YOU_TUBE_APP_URL = "vnd.youtube:";
+
+        String key = trailerRequest.getKey();
+
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + key));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + key));
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException e) {
+            startActivity(webIntent);
+        }
 
     }
 
