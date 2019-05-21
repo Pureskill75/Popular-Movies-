@@ -13,8 +13,6 @@ class TrailerRequest {
     }
 
 
-
-
     String getKey() {
         return key;
     }
