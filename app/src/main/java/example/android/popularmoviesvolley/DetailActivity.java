@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
 
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
+import static example.android.popularmoviesvolley.Constants.TITLE_TEXT;
 
 
 public class DetailActivity extends AppCompatActivity implements TrailerClickListener {
@@ -38,14 +40,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     private TrailerAdapter trailerAdapter;
     private ArrayList<TrailerRequest> mTrailerList;
-    private final String KEY_NAME = "name";
-    private final String KEY_URL = "key";
-
-
     RecyclerView trailerRecyclerView;
     private MovieDatabase movieDatabase;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
         ImageView imageView = findViewById(R.id.image_iv);
         ImageView mFavourites = findViewById(R.id.fav_image_view);
-        ImageView mPlayTrailer = findViewById(R.id.trailer_play_image);
+        //ImageView mPlayTrailer = findViewById(R.id.trailer_play_image);
         ImageView mReadReviews = findViewById(R.id.review_image_view);
         TextView mTrailerTitle = findViewById(R.id.trailer_title);
 
@@ -117,16 +113,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         releaseTextView.setText(String.format(getString(R.string.release_date), releaseDate));
         voteAverageTextView.setText(String.format(getString(R.string.user_rating_tv), voteAverage));
         movieIdTextView.setText(movieId);
+        mTrailerTitle.setText(title);
 
 
         //An instance of the Movie object
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
-
-
-        final TrailerRequest trailerRequest = new TrailerRequest(KEY_URL,KEY_NAME);
-
-
-
 
         mFavourites.setOnClickListener(v -> {
             addToFavourites(movies);
@@ -134,9 +125,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         });
 
 
-        mPlayTrailer.setOnClickListener(v -> playTrailer(trailerRequest)
-
-        );
+//        mPlayTrailer.setOnClickListener(v -> playTrailer()
+//
+//        );
 
 
         mReadReviews.setOnClickListener(v ->
@@ -168,6 +159,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null,
                 new Response.Listener<JSONObject>() {
+
+                    ImageView mPlayTrailer = findViewById(R.id.trailer_play_image);
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -183,10 +176,30 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
                                 mTrailerList.add(new TrailerRequest( movie_key, movie_name));
 
+
+                                mPlayTrailer.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
+                                        final String YOU_TUBE_APP_URL = "vnd.youtube:";
+                                        trailerAdapter.getTrailerList(mTrailerList);
+
+                                        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + movie_key));
+                                        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + movie_key));
+                                        try {
+                                            startActivity(appIntent);
+                                        } catch (ActivityNotFoundException e) {
+                                            startActivity(webIntent);
+                                        }
+
+                                    }
+                                });
+
                             }
                             trailerAdapter = new TrailerAdapter(DetailActivity.this);
-                            trailerRecyclerView.setAdapter(trailerAdapter);
                             trailerAdapter.getTrailerList(mTrailerList);
+                            trailerRecyclerView.setAdapter(trailerAdapter);
                             trailerAdapter.notifyDataSetChanged();
 
 
@@ -206,25 +219,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     }
 
 
-    private void playTrailer(TrailerRequest trailerRequest) {
-
-
-        final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
-        final String YOU_TUBE_APP_URL = "vnd.youtube:";
-
-        String key = trailerRequest.getKey();
-
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + key));
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + key));
-        try {
-            startActivity(appIntent);
-        } catch (ActivityNotFoundException e) {
-            startActivity(webIntent);
-        }
-
-    }
-
-
     //add movie to favourite list/ room database
     private void addToFavourites(final Movies movies) {
         AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(new Movies[]{movies}));
@@ -238,6 +232,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     @Override
     public void onTrailerClicked(TrailerRequest trailerRequest) {
+
+        trailerAdapter.getTrailerList(mTrailerList);
 
         final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
         final String YOU_TUBE_APP_URL = "vnd.youtube:";

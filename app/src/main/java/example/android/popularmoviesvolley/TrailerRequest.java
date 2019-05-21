@@ -3,12 +3,16 @@ package example.android.popularmoviesvolley;
 class TrailerRequest {
 
 
-    private String key, name;
+    private String key;
 
-    public TrailerRequest(String movie_key, String movie_name) {
+    private String name;
+
+    TrailerRequest(String movie_key, String movie_name) {
         this.key = movie_key;
         this.name = movie_name;
     }
+
+
 
 
     String getKey() {

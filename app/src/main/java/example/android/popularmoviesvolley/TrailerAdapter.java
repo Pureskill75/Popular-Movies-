@@ -17,6 +17,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     private ArrayList<TrailerRequest> mTrailerList = new ArrayList<>();
 
+    private  ArrayList<Movies>moviesArrayList = new ArrayList<>();
+
     private TrailerClickListener mListener;
 
 
@@ -33,14 +35,17 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
         return new TrailerViewHolder(view, this);
     }
 
+
+
+
     @Override
     public void onBindViewHolder(@NonNull TrailerViewHolder trailerViewHolder, int i) {
 
         TrailerRequest currentTrailer = mTrailerList.get(i);
 
+
         String trailerName = currentTrailer.getName();
 
-        trailerViewHolder.mTrailerTitle.setText(trailerName);
 
 
 
@@ -84,9 +89,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
                 }
             });
-
-
-
 
 
         }

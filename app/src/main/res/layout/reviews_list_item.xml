@@ -14,6 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
+        android:background="#008577"
         android:layout_marginTop="10dp"
         android:contentDescription="Play Trailer Button"
         app:srcCompat="@drawable/ic_pencil_outline_black_18dp" />
