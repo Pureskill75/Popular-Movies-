@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,13 +122,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         releaseTextView.setText(String.format(getString(R.string.release_date), releaseDate));
         voteAverageTextView.setText(String.format(getString(R.string.user_rating_tv), voteAverage));
         movieIdTextView.setText(movieId);
+        movieIdTextView.setVisibility(View.GONE);
         mTrailerTitle.setText(title);
 
 
         //An instance of the Movie object
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
-        //Adding favourites into room databaseaa
+        //Adding favourites into room database
         mFavourites.setOnClickListener(v -> {
             addToFavourites(movies);
             Toast.makeText(DetailActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();

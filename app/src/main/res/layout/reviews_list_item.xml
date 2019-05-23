@@ -15,6 +15,7 @@
         android:text="Reviews"
         android:textSize="@dimen/text_size" />
 
+
     <TextView
         android:id="@+id/author_text_view"
         android:layout_width="wrap_content"

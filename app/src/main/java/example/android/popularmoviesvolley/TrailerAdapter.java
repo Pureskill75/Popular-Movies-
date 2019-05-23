@@ -39,9 +39,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
         TrailerRequest currentTrailer = mTrailerList.get(i);
 
-
         String trailerName = currentTrailer.getName();
-
 
     }
 

@@ -68,6 +68,7 @@
             android:layout_toEndOf="@id/image_iv"
             android:layout_toRightOf="@id/image_iv"
             android:textSize="@dimen/text_size"
+
             tools:text="696969" />
 
 
@@ -171,8 +172,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-            </LinearLayout>
 
+            </LinearLayout>
 
         </LinearLayout>
 
