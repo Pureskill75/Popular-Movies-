@@ -36,7 +36,6 @@ import example.android.popularmoviesvolley.Room.MovieDatabase;
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
 
-
 public class DetailActivity extends AppCompatActivity implements TrailerClickListener {
 
 
@@ -76,9 +75,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         reviewsRecyclerView.setAdapter(reviewsAdapter);
         reviewsRecyclerView.setHasFixedSize(true);
         reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-
-
-
 
 
         extractTrailer();
@@ -135,15 +131,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         //An instance of the Movie object
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
-
-
-
-
-
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
-
-
 
 
         AppExecutors.getInstance().diskIO().execute(() -> {
@@ -160,7 +149,18 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         //Adding favourites into room database
         mFavourites.setOnClickListener(v -> {
 
-            addToFavourites(movies);
+            if (movieID == DEFAULT_MOVIE_ID) {
+                movieID = movies.getId();
+                addToFavourites(movies);
+                Toast.makeText(DetailActivity.this, "Movie Added to Favourites", Toast.LENGTH_SHORT).show();
+                mFavourites.setVisibility(View.GONE);
+
+            } else {
+                movieID = DEFAULT_MOVIE_ID;
+                removeFromFavs(movies);
+                Toast.makeText(DetailActivity.this, "Movie Removed From Favourites", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
     }
@@ -310,20 +310,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     //add movie to favourite list/room database
     private void addToFavourites(final Movies movies) {
 
-        Movies movie = movieDatabase.movieDao().loadMovieById(movies.getId());
-
-        if (movieID == DEFAULT_MOVIE_ID) {
-            movieID = Integer.parseInt(movie.getMovie_id());
-
-            AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(movies));
-
-            Toast.makeText(DetailActivity.this, "Movie Added to Favourites", Toast.LENGTH_SHORT).show();
-        } else {
-            movieID = DEFAULT_MOVIE_ID;
-            removeFromFavs(movies);
-            Toast.makeText(DetailActivity.this, "Movie Removed", Toast.LENGTH_SHORT).show();
-        }
-
+        AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(movies));
     }
 
 
