@@ -5,11 +5,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -51,12 +51,12 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     public static RequestQueue mRequestQueue;
     private List<Movies> mFavList = new ArrayList<>();
     private MovieDatabase database;
-    private final String SORT_KEY = "SORT_KEY";
-    private final String LIST_STATE = "LIST_STATE";
+    private String SORT_KEY = "SORT_KEY";
+    private String LIST_STATE = "LIST_STATE";
     private String sortOrder = Constants.POPULAR_URL;
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private static Bundle mBundleRecyclerViewState;
     Toolbar toolbar;
-
-
 
 
     @Override
@@ -78,13 +78,12 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         //Instance of database
         database = MovieDatabase.getInstance(getApplicationContext());
 
         if (savedInstanceState != null) {
             sortOrder = savedInstanceState.getString(SORT_KEY);
-            mRecyclerView.scrollToPosition(savedInstanceState.getInt(LIST_STATE));
+            mRecyclerView.scrollToPosition(savedInstanceState.getInt(KEY_RECYCLER_STATE));
         }
 
         mRequestQueue = Volley.newRequestQueue(this);
@@ -92,15 +91,34 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
         setupViewModel();
 
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        // save RecyclerView state
+        mBundleRecyclerViewState = new Bundle();
+        Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // restore RecyclerView state
+        if (mBundleRecyclerViewState != null) {
+            Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
+        }
     }
 
 
     // parse Json using volley to make network call
     private String parseMovieJSON(final String url) {
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
 
 
@@ -113,8 +131,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject movie = jsonArray.getJSONObject(i);
 
-                            //Get json data as strings
-                            //int id = movie.optInt("id");
+
                             String movie_id = movie.optString("id");
                             String posterPath = movie.optString("poster_path");
                             String originalTitle = movie.optString("title");
@@ -164,10 +181,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     }
 
 
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -175,9 +188,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
         return true;
     }
-
-
-
 
 
     @Override
@@ -188,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
             case R.id.most_popular:
                 setTitle("Most Popular");
                 // return Most Popular Movies list from API
-                sortOrder = parseMovieJSON(Constants.POPULAR_URL);
+                SORT_KEY = parseMovieJSON(Constants.POPULAR_URL);
 
 
                 break;
@@ -196,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
             case R.id.top_rated:
                 setTitle("Top Rated");
                 // return Top Rated Movies list from API
-                sortOrder = parseMovieJSON(Constants.TOP_RATED_URL);
+                SORT_KEY = parseMovieJSON(Constants.TOP_RATED_URL);
 
                 break;
 
@@ -231,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
         if (mFavList.size() > 0) {
             // Remove all favourites from DB
-            AppExecutors.getInstance().diskIO().execute(() -> database.movieDao().deleteMovie(mFavList));
+            AppExecutors.getInstance().diskIO().execute(() -> database.movieDao().deleteAllMovies(mFavList));
             Toast.makeText(this, "Movies deleted", Toast.LENGTH_SHORT).show();
 
         } else {
@@ -239,21 +249,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
         }
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(SORT_KEY, sortOrder);
-        outState.putInt(LIST_STATE, ((GridLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition());
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        final int position = savedInstanceState.getInt(LIST_STATE);
-        mRecyclerView.scrollToPosition(position);
-    }
 
     //Detail intents to throw data to Movie Detail activity for displaying.
     @Override

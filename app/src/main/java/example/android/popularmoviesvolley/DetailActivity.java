@@ -2,6 +2,9 @@ package example.android.popularmoviesvolley;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Movie;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +36,7 @@ import example.android.popularmoviesvolley.Room.MovieDatabase;
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
 
+
 public class DetailActivity extends AppCompatActivity implements TrailerClickListener {
 
 
@@ -42,6 +46,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     private ArrayList<ReviewsRequest> mReviewsList;
     RecyclerView trailerRecyclerView;
     RecyclerView reviewsRecyclerView;
+    private static final int DEFAULT_MOVIE_ID = 0;
+    private int movieID;
+
 
     private MovieDatabase movieDatabase;
 
@@ -71,8 +78,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
 
-        //Instance of database
-        movieDatabase = MovieDatabase.getInstance(getApplicationContext());
+
 
 
         extractTrailer();
@@ -129,14 +135,35 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         //An instance of the Movie object
         final Movies movies = new Movies(movieId, posterUrl, title, overview, releaseDate, voteAverage);
 
+
+
+
+
+
+        //Instance of database
+        movieDatabase = MovieDatabase.getInstance(getApplicationContext());
+
+
+
+
+        AppExecutors.getInstance().diskIO().execute(() -> {
+            // Load movie from database using currentmovie ID.
+            Movies movie = movieDatabase.movieDao().loadMovieById(movies.getId());
+
+            /// If movie exists in database, initialise movieID.
+            if (movie != null) {
+                movieID = Integer.parseInt(String.valueOf(movies.getId()));
+
+            }
+        });
+
         //Adding favourites into room database
         mFavourites.setOnClickListener(v -> {
+
             addToFavourites(movies);
-            Toast.makeText(DetailActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
         });
 
     }
-
 
     private void extractTrailer() {
 
@@ -207,8 +234,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                         }
                     }
                 }, error -> {
-            mTrailerList = null;
-            error.printStackTrace();
+
+            if (checkConnection()) {
+                extractTrailer();
+            } else if (!checkConnection()) {
+                Toast.makeText(DetailActivity.this, "Check Network Connection", Toast.LENGTH_LONG).show();
+                mReviewsList = null;
+            }
+
         });
         MainActivity.mRequestQueue.add(request);
 
@@ -260,8 +293,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                         e.printStackTrace();
                     }
                 }, error -> {
-            mReviewsList = null;
-            error.printStackTrace();
+
+            if (checkConnection()) {
+                extractReviews();
+            } else if (!checkConnection()) {
+                Toast.makeText(DetailActivity.this, "Check Network Connection", Toast.LENGTH_LONG).show();
+                mReviewsList = null;
+            }
         });
 
         MainActivity.mRequestQueue.add(request);
@@ -269,9 +307,29 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     }
 
 
-    //add movie to favourite list/ room database
+    //add movie to favourite list/room database
     private void addToFavourites(final Movies movies) {
-        AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(new Movies[]{movies}));
+
+        Movies movie = movieDatabase.movieDao().loadMovieById(movies.getId());
+
+        if (movieID == DEFAULT_MOVIE_ID) {
+            movieID = Integer.parseInt(movie.getMovie_id());
+
+            AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(movies));
+
+            Toast.makeText(DetailActivity.this, "Movie Added to Favourites", Toast.LENGTH_SHORT).show();
+        } else {
+            movieID = DEFAULT_MOVIE_ID;
+            removeFromFavs(movies);
+            Toast.makeText(DetailActivity.this, "Movie Removed", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    //delete movie from favourite list/room database
+    private void removeFromFavs(final Movies movies) {
+        AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().deleteMovie(movies));
     }
 
     @Override
@@ -291,6 +349,29 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         } catch (ActivityNotFoundException e) {
             startActivity(webIntent);
         }
+
+    }
+
+    // A reference to the ConnectivityManager to check state of network connectivity (Mobile and wifi).
+    private boolean checkConnection() {
+
+        boolean wifiConnected = false;
+        boolean mobileDataConnected = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
+        NetworkInfo[] networkInfo = connectivityManager.getAllNetworkInfo();
+
+        for (NetworkInfo info : networkInfo) {
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    wifiConnected = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    mobileDataConnected = true;
+
+        }
+        return wifiConnected || mobileDataConnected;
 
     }
 

@@ -12,5 +12,5 @@ class Constants {
     static final String OVERVIEW_TEXT = "overview";
     static final String RELEASE = "release_date";
     static final String VOTE_AVERAGE = "vote_average";
-    static final String MOVIE_ID = "id";
+    static String MOVIE_ID = "id";
 }

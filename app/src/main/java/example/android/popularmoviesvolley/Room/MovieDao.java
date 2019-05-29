@@ -19,10 +19,10 @@ public interface MovieDao {
     LiveData<List<Movies>> loadAllMovies();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMovie(Movies[] movies);
+    void insertMovie(Movies movies);
 
     @Delete
-    void deleteMovie(List<Movies> movies);
+    void deleteMovie(Movies movies);
 
     @Delete
     void deleteAllMovies(List<Movies> movies);

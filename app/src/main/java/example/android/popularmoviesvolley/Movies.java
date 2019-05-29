@@ -11,6 +11,10 @@ import android.os.Parcelable;
 public class Movies implements Parcelable {
 
 
+    public static Creator<Movies> getCREATOR() {
+        return CREATOR;
+    }
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -44,7 +48,7 @@ public class Movies implements Parcelable {
     }
 
     @Ignore
-    private Movies(Parcel in) {
+    public Movies(Parcel in) {
         id = in.readInt();
         movie_id = in.readString();
         posterPath = in.readString();
