@@ -15,7 +15,7 @@ import example.android.popularmoviesvolley.Movies;
 public interface MovieDao {
 
 
-    @Query("SELECT * FROM movie_table ORDER BY id")
+    @Query("SELECT * FROM movie_table ORDER BY movie_id")
     LiveData<List<Movies>> loadAllMovies();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -27,7 +27,7 @@ public interface MovieDao {
     @Delete
     void deleteAllMovies(List<Movies> movies);
 
-    @Query("SELECT * FROM movie_table WHERE id = :id")
+    @Query("SELECT * FROM movie_table WHERE movie_id = :id")
     Movies loadMovieById(int id);
 
 }

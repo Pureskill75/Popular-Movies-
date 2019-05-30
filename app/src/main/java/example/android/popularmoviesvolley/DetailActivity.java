@@ -48,7 +48,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     private int movieID;
 
 
-
     private MovieDatabase movieDatabase;
 
     @Override
@@ -58,8 +57,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
         ImageView imageView = findViewById(R.id.image_iv);
         ImageView mFavourites = findViewById(R.id.fav_image_view);
-        TextView mTrailerTitle = findViewById(R.id.trailer_title);
-
 
 
         mTrailerList = new ArrayList<>();
@@ -137,11 +134,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
         AppExecutors.getInstance().diskIO().execute(() -> {
             // Load movie from database using currentmovie ID.
-            Movies movie = movieDatabase.movieDao().loadMovieById(movies.getId());
+            Movies movie = movieDatabase.movieDao().loadMovieById(Integer.parseInt(movies.getMovie_id()));
 
             /// If movie exists in database, initialise movieID.
             if (movie != null) {
-                movieID = Integer.parseInt(String.valueOf(movies.getId()));
+                movieID = Integer.parseInt(String.valueOf(movies.getMovie_id()));
 
             }
         });
@@ -150,10 +147,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         mFavourites.setOnClickListener(v -> {
 
             if (movieID == DEFAULT_MOVIE_ID) {
-                movieID = movies.getId();
+                movieID = Integer.parseInt(movies.getMovie_id());
                 addToFavourites(movies);
                 Toast.makeText(DetailActivity.this, "Movie Added to Favourites", Toast.LENGTH_SHORT).show();
-                mFavourites.setVisibility(View.GONE);
+
 
             } else {
                 movieID = DEFAULT_MOVIE_ID;
@@ -193,7 +190,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                         try {
                             JSONArray jsonArray = response.getJSONArray("results");
 
-                            mTrailerList.clear();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject results = jsonArray.getJSONObject(i);
@@ -253,7 +249,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                     try {
                         JSONArray jsonArray = response.getJSONArray("results");
 
-                        mReviewsList.clear();
 
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject results = jsonArray.getJSONObject(i);

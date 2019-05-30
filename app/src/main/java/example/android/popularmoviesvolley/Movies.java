@@ -6,6 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "movie_table")
 public class Movies implements Parcelable {
@@ -15,10 +16,8 @@ public class Movies implements Parcelable {
         return CREATOR;
     }
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
-    @ColumnInfo(name = "movie_id")
+    @NonNull
+    @PrimaryKey()
     private String movie_id;
 
     @ColumnInfo(name = "poster_path")
@@ -37,7 +36,7 @@ public class Movies implements Parcelable {
     private String voteAverage;
 
 
-    public Movies( String movie_id, String posterPath, String originalTitle, String overview, String releaseDate, String voteAverage) {
+    public Movies(String movie_id, String posterPath, String originalTitle, String overview, String releaseDate, String voteAverage) {
         this.movie_id = movie_id;
         this.posterPath = posterPath;
         this.originalTitle = originalTitle;
@@ -49,7 +48,7 @@ public class Movies implements Parcelable {
 
     @Ignore
     public Movies(Parcel in) {
-        id = in.readInt();
+
         movie_id = in.readString();
         posterPath = in.readString();
         originalTitle = in.readString();
@@ -61,7 +60,6 @@ public class Movies implements Parcelable {
     @Ignore
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
         dest.writeString(movie_id);
         dest.writeString(posterPath);
         dest.writeString(originalTitle);
@@ -137,11 +135,5 @@ public class Movies implements Parcelable {
         this.movie_id = mMovie_id;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

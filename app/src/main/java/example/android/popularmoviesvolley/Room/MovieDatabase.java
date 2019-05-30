@@ -8,9 +8,8 @@ import android.content.Context;
 
 import example.android.popularmoviesvolley.Movies;
 
-@Database(entities = {Movies.class}, version = 1, exportSchema = false)
+@Database(entities = {Movies.class}, version = 2, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
-
 
 
     private static final String DATABASE_NAME = "movie_database";
@@ -23,14 +22,13 @@ public abstract class MovieDatabase extends RoomDatabase {
     public static synchronized MovieDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                    MovieDatabase.class,MovieDatabase.DATABASE_NAME)
+                    MovieDatabase.class, MovieDatabase.DATABASE_NAME)
                     .fallbackToDestructiveMigration()
                     .build();
 
         }
         return INSTANCE;
     }
-
 
 
 }
