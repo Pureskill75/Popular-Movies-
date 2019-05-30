@@ -5,5 +5,4 @@ public interface TrailerClickListener {
     void onTrailerClicked(TrailerRequest trailerRequest);
 
 
-
 }

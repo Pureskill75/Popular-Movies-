@@ -2,7 +2,6 @@ package example.android.popularmoviesvolley;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Movie;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -49,6 +48,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     private int movieID;
 
 
+
     private MovieDatabase movieDatabase;
 
     @Override
@@ -59,6 +59,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         ImageView imageView = findViewById(R.id.image_iv);
         ImageView mFavourites = findViewById(R.id.fav_image_view);
         TextView mTrailerTitle = findViewById(R.id.trailer_title);
+
 
 
         mTrailerList = new ArrayList<>();
@@ -125,7 +126,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         voteAverageTextView.setText(String.format(getString(R.string.user_rating_tv), voteAverage));
         movieIdTextView.setText(movieId);
         movieIdTextView.setVisibility(View.GONE);
-        mTrailerTitle.setText(title);
 
 
         //An instance of the Movie object
@@ -188,8 +188,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
 
-                    ImageView mPlayTrailer = findViewById(R.id.trailer_play_image);
-
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -204,23 +202,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
                                 String movie_name = results.optString("name");
 
                                 mTrailerList.add(new TrailerRequest(movie_key, movie_name));
-
-
-                                mPlayTrailer.setOnClickListener(v -> {
-
-                                    final String YOU_TUBE_WEB_URL = "http://www.youtube.com/watch?v=";
-                                    final String YOU_TUBE_APP_URL = "vnd.youtube:";
-                                    trailerAdapter.getTrailerList(mTrailerList);
-
-                                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_APP_URL + movie_key));
-                                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOU_TUBE_WEB_URL + movie_key));
-                                    try {
-                                        startActivity(appIntent);
-                                    } catch (ActivityNotFoundException e) {
-                                        startActivity(webIntent);
-                                    }
-
-                                });
 
                             }
                             trailerAdapter = new TrailerAdapter(DetailActivity.this);

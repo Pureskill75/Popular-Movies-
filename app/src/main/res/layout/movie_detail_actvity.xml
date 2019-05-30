@@ -97,7 +97,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_top"
-                android:fontFamily="sans-serif"
                 android:text="Plot synopsis"
                 android:textSize="@dimen/text_size" />
 
@@ -113,49 +112,32 @@
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
 
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:id="@+id/trailer_container"
+            <RelativeLayout
+                android:id="@+id/trailer_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/trailers_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_centerInParent="true" />
 
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/trailers_recycler_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true" />
+                <TextView
+                    android:id="@+id/trailer_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="17dp"
+                    android:textSize="@dimen/text_size"
+                    tools:text="Avengers" />
 
 
-                    <ImageView
-                        android:id="@+id/trailer_play_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="38dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="10dp"
-                        android:contentDescription="Play trailer Button"
-                        app:srcCompat="@drawable/play_circle_color" />
-
-                    <TextView
-                        android:id="@+id/trailer_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="17dp"
-                        android:layout_toEndOf="@id/trailer_play_image"
-                        android:layout_toRightOf="@id/trailer_play_image"
-                        android:textSize="@dimen/text_size"
-                        tools:text="Avengers" />
-
-
-                </RelativeLayout>
-
-            </android.support.v4.widget.NestedScrollView>
+            </RelativeLayout>
 
 
             <View style="@style/Divider" />

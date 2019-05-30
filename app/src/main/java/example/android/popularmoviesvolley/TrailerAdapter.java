@@ -1,6 +1,7 @@
 package example.android.popularmoviesvolley;
 
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 
@@ -16,6 +19,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
 
     private ArrayList<TrailerRequest> mTrailerList = new ArrayList<>();
+
 
     private TrailerClickListener mListener;
 
@@ -37,9 +41,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     @Override
     public void onBindViewHolder(@NonNull TrailerViewHolder trailerViewHolder, int i) {
 
-        TrailerRequest currentTrailer = mTrailerList.get(i);
-
-        String trailerName = currentTrailer.getName();
+        trailerViewHolder.bindTrailerView(i);
 
     }
 
@@ -62,7 +64,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
         final TrailerAdapter trailerAdapter;
         private TextView mTrailerTitle;
-        private ImageView mPlayTrailer;
+        private ImageView mTrailerThumbnail;
 
 
         private TrailerViewHolder(View itemView, TrailerAdapter trailerAdapter) {
@@ -70,7 +72,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
             this.trailerAdapter = trailerAdapter;
 
             mTrailerTitle = itemView.findViewById(R.id.trailer_title);
-            mPlayTrailer = itemView.findViewById(R.id.trailer_play_image);
+
+            mTrailerThumbnail = itemView.findViewById(R.id.trailer_thumbnail_view);
+
 
             itemView.setOnClickListener(v -> {
                 if (mListener != null) {
@@ -82,9 +86,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
                 }
             });
 
-
         }
 
+        void bindTrailerView(int position) {
+            mTrailerTitle.setText(mTrailerList.get(position).getName());
+            String THUMBNAIL_URL = "https://img.youtube.com/vi/";
+            String THUMBNAIL_END = "/0.jpg";
+            Picasso.get().load(Uri.parse(THUMBNAIL_URL + mTrailerList.get(position).getKey() + THUMBNAIL_END)).fit().into(mTrailerThumbnail);
+        }
 
     }
 
