@@ -1,11 +1,15 @@
 package example.android.popularmoviesvolley;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,10 +31,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
+import example.android.popularmoviesvolley.Room.MovieViewModel;
 
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
@@ -46,6 +52,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     RecyclerView reviewsRecyclerView;
     private static final int DEFAULT_MOVIE_ID = 0;
     private int movieID;
+    private MovieViewModel movieViewModel;
 
 
     private MovieDatabase movieDatabase;
@@ -131,12 +138,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         //Instance of database
         movieDatabase = MovieDatabase.getInstance(getApplicationContext());
 
-
         AppExecutors.getInstance().diskIO().execute(() -> {
-            // Load movie from database using currentmovie ID.
+
             Movies movie = movieDatabase.movieDao().loadMovieById(Integer.parseInt(movies.getMovie_id()));
 
-            /// If movie exists in database, initialise movieID.
             if (movie != null) {
                 movieID = Integer.parseInt(String.valueOf(movies.getMovie_id()));
 
@@ -149,18 +154,26 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
             if (movieID == DEFAULT_MOVIE_ID) {
                 movieID = Integer.parseInt(movies.getMovie_id());
                 addToFavourites(movies);
-                Toast.makeText(DetailActivity.this, "Movie Added to Favourites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
 
 
             } else {
                 movieID = DEFAULT_MOVIE_ID;
                 removeFromFavs(movies);
-                Toast.makeText(DetailActivity.this, "Movie Removed From Favourites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailActivity.this, "Removed From Favourites", Toast.LENGTH_SHORT).show();
             }
 
         });
 
     }
+
+
+
+
+
+
+
+
 
     private void extractTrailer() {
 
@@ -286,13 +299,17 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     //add movie to favourite list/room database
     private void addToFavourites(final Movies movies) {
 
+
         AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(movies));
+
     }
 
 
     //delete movie from favourite list/room database
     private void removeFromFavs(final Movies movies) {
+
         AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().deleteMovie(movies));
+
     }
 
     @Override

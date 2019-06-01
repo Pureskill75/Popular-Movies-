@@ -127,6 +127,7 @@ public class Movies implements Parcelable {
         this.voteAverage = mVoteAverage;
     }
 
+
     public String getMovie_id() {
         return movie_id;
     }

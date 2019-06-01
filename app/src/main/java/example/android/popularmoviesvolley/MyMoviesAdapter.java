@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
 
@@ -22,8 +22,6 @@ public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.Movies
     private Context mContext;
     private ArrayList<Movies> mMoviesArrayList;
     private OnItemClickListener mListener;
-
-
 
 
     public interface OnItemClickListener {
@@ -55,8 +53,6 @@ public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.Movies
         final Movies movie = mMoviesArrayList.get(position);
 
 
-
-
         //load the appropriate Image view using Utils
         String posterUrl = Utils.buildPosterUrl(movie.getPosterPath());
 
@@ -71,7 +67,6 @@ public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.Movies
 
 
     }
-
 
 
     @Override

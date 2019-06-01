@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     RecyclerView mRecyclerView;
     private MyMoviesAdapter myMoviesAdapter;
     private FavouritesAdapter favouritesAdapter;
-    private ArrayList<Movies> mMoviesList;
+    private ArrayList<Movies> mMovieList;
     public static RequestQueue mRequestQueue;
     private List<Movies> mFavList = new ArrayList<>();
     private MovieDatabase database;
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
         setContentView(R.layout.activity_main);
 
 
-        mMoviesList = new ArrayList<>();
-        myMoviesAdapter = new MyMoviesAdapter(this, mMoviesList);
+        mMovieList = new ArrayList<>();
+        myMoviesAdapter = new MyMoviesAdapter(this, mMovieList);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setAdapter(myMoviesAdapter);
@@ -125,8 +126,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
                     try {
                         JSONArray jsonArray = response.getJSONArray("results");
 
-                        mMoviesList.clear();
-
 
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject movie = jsonArray.getJSONObject(i);
@@ -140,11 +139,11 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
                             String voteAverage = movie.optString("vote_average");
 
 
-                            mMoviesList.add(new Movies(movie_id, posterPath, originalTitle, overview, releaseDate, voteAverage));
+                            mMovieList.add(new Movies(movie_id, posterPath, originalTitle, overview, releaseDate, voteAverage));
                         }
 
 
-                        myMoviesAdapter = new MyMoviesAdapter(MainActivity.this, mMoviesList);
+                        myMoviesAdapter = new MyMoviesAdapter(MainActivity.this, mMovieList);
                         myMoviesAdapter.setOnItemClickListener(MainActivity.this);
                         mRecyclerView.setAdapter(myMoviesAdapter);
                         myMoviesAdapter.notifyDataSetChanged();
@@ -158,14 +157,11 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
                 if (checkConnection()) {
 
-
                     parseMovieJSON(url);
-
 
                 } else if (!checkConnection()) {
 
                     Toast.makeText(MainActivity.this, "Check Network Connection", Toast.LENGTH_LONG).show();
-                    mMoviesList = null;
 
                 }
 
@@ -254,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
     @Override
     public void onItemClick(int position) {
         Intent detailIntent = new Intent(this, DetailActivity.class);
-        Movies clickedItem = mMoviesList.get(position);
+        Movies clickedItem = mMovieList.get(position);
 
         detailIntent.putExtra(EXTRA_URL, clickedItem.getPosterPath());
         detailIntent.putExtra(TITLE_TEXT, clickedItem.getOriginalTitle());
