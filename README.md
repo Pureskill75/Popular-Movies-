@@ -6,7 +6,7 @@ The App also leverages Youtube to play trailers and other information such as ra
 
 ## Installation 
 
-The app fetches movie information using The Movie Database (TMDb) API. You have to enter your own API key into gradle.properties file.
+The app fetches movie information using [The Movie Database (TMDb) API](https://www.themoviedb.org/documentation/api). You have to enter your own API key into gradle.properties file.
 `MOVIE_DB_API_KEY="Your Api Key"`
 If you don’t already have an account, you will need to create one in order to request an API Key .
 
