@@ -1,23 +1,23 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.Model;
 
-class TrailerRequest {
+public class TrailerRequest {
 
 
     private String key;
 
     private String name;
 
-    TrailerRequest(String movie_key, String movie_name) {
+    public TrailerRequest(String movie_key, String movie_name) {
         this.key = movie_key;
         this.name = movie_name;
     }
 
 
-    String getKey() {
+    public String getKey() {
         return key;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 

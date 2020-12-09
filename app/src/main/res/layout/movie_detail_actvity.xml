@@ -54,8 +54,9 @@
             android:layout_below="@id/user_rating_text_view"
             android:layout_toEndOf="@id/image_iv"
             android:layout_toRightOf="@id/image_iv"
-            android:text="favourite"
-            app:srcCompat="@drawable/add_review_button" />
+            android:text="@string/favourite_detail_activity"
+            app:srcCompat="@drawable/add_review_button"
+            android:contentDescription="@string/rate_star_icon" />
 
         <TextView
             android:id="@+id/movie_id_tv"
@@ -97,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_top"
-                android:text="Plot synopsis"
+                android:text="@string/plot_synopsis_detail_activity"
                 android:textSize="@dimen/text_size" />
 
             <View style="@style/Divider" />
@@ -108,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_top"
-                android:text="Trailer"
+                android:text="@string/trailer_detail_activity"
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
 
@@ -120,7 +121,7 @@
                 android:orientation="vertical">
 
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/trailers_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,7 +135,8 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="17dp"
                     android:textSize="@dimen/text_size"
-                    tools:text="Avengers" />
+                    tools:text="Avengers"
+                    android:layout_marginStart="30dp" />
 
 
             </RelativeLayout>
@@ -149,7 +151,7 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/reviews_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

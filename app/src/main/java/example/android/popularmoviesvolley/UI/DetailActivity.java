@@ -1,24 +1,21 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.UI;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
+
 import com.squareup.picasso.Picasso;
 
 import com.android.volley.Request;
@@ -31,12 +28,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
+
+import example.android.popularmoviesvolley.Adapters.ReviewsAdapter;
+import example.android.popularmoviesvolley.Adapters.TrailerAdapter;
+import example.android.popularmoviesvolley.BuildConfig;
+import example.android.popularmoviesvolley.Constants;
 import example.android.popularmoviesvolley.ImageUtils.Utils;
+import example.android.popularmoviesvolley.Model.Movies;
+import example.android.popularmoviesvolley.R;
+import example.android.popularmoviesvolley.Model.ReviewsRequest;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
-import example.android.popularmoviesvolley.Room.MovieViewModel;
+import example.android.popularmoviesvolley.Interface.TrailerClickListener;
+import example.android.popularmoviesvolley.Model.TrailerRequest;
+
 
 import static example.android.popularmoviesvolley.Constants.MOVIE_ID;
 
@@ -52,7 +58,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
     RecyclerView reviewsRecyclerView;
     private static final int DEFAULT_MOVIE_ID = 0;
     private int movieID;
-    private MovieViewModel movieViewModel;
 
 
     private MovieDatabase movieDatabase;
@@ -65,7 +70,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         ImageView imageView = findViewById(R.id.image_iv);
         ImageView mFavourites = findViewById(R.id.fav_image_view);
 
-
+        //Trailers RecyclerView and adapter setup
         mTrailerList = new ArrayList<>();
         trailerAdapter = new TrailerAdapter(this);
         trailerRecyclerView = findViewById(R.id.trailers_recycler_view);
@@ -73,7 +78,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
         trailerRecyclerView.setHasFixedSize(true);
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
-
+        //reviews RecyclerView and adapter setup
         mReviewsList = new ArrayList<>();
         reviewsRecyclerView = findViewById(R.id.reviews_recycler_view);
         reviewsAdapter = new ReviewsAdapter();
@@ -167,14 +172,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     }
 
-
-
-
-
-
-
-
-
+    //trailer Endpoint Extraction
     private void extractTrailer() {
 
 
@@ -196,32 +194,28 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("results");
+                response -> {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("results");
 
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject results = jsonArray.getJSONObject(i);
-                                //Get json data as strings
-                                String movie_key = results.optString("key");
-                                String movie_name = results.optString("name");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject results = jsonArray.getJSONObject(i);
+                            //Get json data as strings
+                            String movie_key = results.optString("key");
+                            String movie_name = results.optString("name");
 
-                                mTrailerList.add(new TrailerRequest(movie_key, movie_name));
+                            mTrailerList.add(new TrailerRequest(movie_key, movie_name));
 
-                            }
-                            trailerAdapter = new TrailerAdapter(DetailActivity.this);
-                            trailerAdapter.getTrailerList(mTrailerList);
-                            trailerRecyclerView.setAdapter(trailerAdapter);
-                            trailerAdapter.notifyDataSetChanged();
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+                        trailerAdapter = new TrailerAdapter(DetailActivity.this);
+                        trailerAdapter.getTrailerList(mTrailerList);
+                        trailerRecyclerView.setAdapter(trailerAdapter);
+                        trailerAdapter.notifyDataSetChanged();
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }, error -> {
 
@@ -237,7 +231,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     }
 
-
+    //trailer reviews Endpoint Extraction
     private void extractReviews() {
 
         //https://api.themoviedb.org/3/movie/244786/reviews?api_key=###
@@ -298,7 +292,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerClickLis
 
     //add movie to favourite list/room database
     private void addToFavourites(final Movies movies) {
-
 
         AppExecutors.getInstance().diskIO().execute(() -> movieDatabase.movieDao().insertMovie(movies));
 

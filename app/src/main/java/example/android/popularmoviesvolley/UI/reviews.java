@@ -1,7 +1,9 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.UI;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import example.android.popularmoviesvolley.R;
 
 public class reviews extends AppCompatActivity {
 

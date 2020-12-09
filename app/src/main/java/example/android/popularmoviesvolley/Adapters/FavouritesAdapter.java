@@ -1,8 +1,8 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.Adapters;
 
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
+import example.android.popularmoviesvolley.Interface.MovieClickListener;
+import example.android.popularmoviesvolley.Model.Movies;
+import example.android.popularmoviesvolley.R;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavViewHolder> {
 
     private MovieClickListener mListener;
     private List<Movies> mFavList = new ArrayList<>();
 
-    FavouritesAdapter(MovieClickListener mListener) {
+    public FavouritesAdapter(MovieClickListener mListener) {
         this.mListener = mListener;
     }
 
@@ -59,7 +62,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     }
 
 
-    void getFavouriteList(List<Movies> movies) {
+    public void getFavouriteList(List<Movies> movies) {
         this.mFavList.clear();
         if (movies != null) {
             mFavList.addAll(movies);

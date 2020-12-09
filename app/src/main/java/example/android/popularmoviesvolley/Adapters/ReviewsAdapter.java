@@ -1,8 +1,8 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.Adapters;
 
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
+
+import example.android.popularmoviesvolley.R;
+import example.android.popularmoviesvolley.Model.ReviewsRequest;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewHolder> {
 
@@ -41,7 +44,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewHo
     }
 
 
-    void getReviewList(ArrayList<ReviewsRequest> reviews) {
+    public void getReviewList(ArrayList<ReviewsRequest> reviews) {
         this.mReviewList.clear();
 
         if (reviews != null) {

@@ -1,8 +1,8 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.Adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 
 import example.android.popularmoviesvolley.ImageUtils.Utils;
+import example.android.popularmoviesvolley.Model.Movies;
+import example.android.popularmoviesvolley.R;
 
 public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.MoviesViewHolder> {
 
@@ -28,11 +30,11 @@ public class MyMoviesAdapter extends RecyclerView.Adapter<MyMoviesAdapter.Movies
         void onItemClick(int position);
     }
 
-    void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
 
-    MyMoviesAdapter(Context context, ArrayList<Movies> MoviesArrayList) {
+    public MyMoviesAdapter(Context context, ArrayList<Movies> MoviesArrayList) {
         mContext = context;
         mMoviesArrayList = MoviesArrayList;
 

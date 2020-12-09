@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Cine Magic</string>
     <string name="poster_thumbnail_detail_activity">detail activity poster thumbnail</string>
 
     <!-- String resource for detail activity Java-->
@@ -7,6 +7,15 @@
     <string name="user_rating_tv">Rating: %s</string>
     <string name="Grid_iv">Grid_iv_poster</string>
 
-    <!-- String resource for Grid_Layout Xml-->
+    <!-- Strings resource for Layout Xml-->
     <string name="poster_thumbnail_mainActivity">poster_thumbnail_MainActivity</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="favourites">Favourites</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="favourite_detail_activity">favourite</string>
+    <string name="plot_synopsis_detail_activity">Plot synopsis</string>
+    <string name="trailer_detail_activity">Trailer</string>
+    <string name="rate_star_icon">rate_star_icon</string>
+    <string name="reviews_list_item">Reviews</string>
+    <string name="trailer_thumbnail_iv">trailer_thumbnail</string>
 </resources>

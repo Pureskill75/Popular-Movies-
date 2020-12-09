@@ -1,13 +1,13 @@
 package example.android.popularmoviesvolley.Room;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import example.android.popularmoviesvolley.Movies;
+import example.android.popularmoviesvolley.Model.Movies;
 
 public class MovieViewModel extends AndroidViewModel {
 

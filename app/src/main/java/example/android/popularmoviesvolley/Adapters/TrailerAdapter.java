@@ -1,9 +1,9 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.Adapters;
 
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import example.android.popularmoviesvolley.R;
+import example.android.popularmoviesvolley.Interface.TrailerClickListener;
+import example.android.popularmoviesvolley.Model.TrailerRequest;
 
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
@@ -24,7 +28,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     private TrailerClickListener mListener;
 
 
-    TrailerAdapter(TrailerClickListener listener) {
+    public TrailerAdapter(TrailerClickListener listener) {
         this.mListener = listener;
     }
 
@@ -51,7 +55,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     }
 
 
-    void getTrailerList(ArrayList<TrailerRequest> trailer) {
+    public void getTrailerList(ArrayList<TrailerRequest> trailer) {
         this.mTrailerList.clear();
 
         if (trailer != null) {

@@ -1,20 +1,19 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.UI;
 
 import android.app.AlertDialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 
 import com.android.volley.NetworkError;
@@ -31,6 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import example.android.popularmoviesvolley.Adapters.FavouritesAdapter;
+import example.android.popularmoviesvolley.Adapters.MyMoviesAdapter;
+import example.android.popularmoviesvolley.Constants;
+import example.android.popularmoviesvolley.Interface.MovieClickListener;
+import example.android.popularmoviesvolley.Model.Movies;
+import example.android.popularmoviesvolley.R;
 import example.android.popularmoviesvolley.Room.AppExecutors;
 import example.android.popularmoviesvolley.Room.MovieDatabase;
 import example.android.popularmoviesvolley.Room.MovieViewModel;
@@ -84,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
         if (savedInstanceState != null) {
             sortOrder = savedInstanceState.getString(SORT_KEY);
+            //Save scroll position
             mRecyclerView.scrollToPosition(savedInstanceState.getInt(KEY_RECYCLER_STATE));
         }
 
@@ -165,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
 
                 }
 
-
             }
 
         });
@@ -211,13 +216,6 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
                 setTitle("My Favourite Movies");
                 mRecyclerView.setAdapter(favouritesAdapter);
                 break;
-
-
-            case R.id.delete:
-
-                showDeleteConfirmationDialog();
-                break;
-
 
         }
         return super.onOptionsItemSelected(item);
@@ -291,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements MyMoviesAdapter.O
         builder.setMessage("Delete Favourites List?");
         builder.getContext();
         builder.setPositiveButton("Delete", (dialog, id) -> {
-            // User clicked the "Delete" button, so delete the pet.
+            // User clicked the "Delete" button, so delete movie.
             deleteFavourites();
         });
         builder.setNegativeButton("Cancel", (dialog, id) -> {

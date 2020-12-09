@@ -1,4 +1,4 @@
-package example.android.popularmoviesvolley;
+package example.android.popularmoviesvolley.Model;
 
 public class ReviewsRequest {
 
@@ -7,7 +7,7 @@ public class ReviewsRequest {
 
     private String content;
 
-    ReviewsRequest(String review_author, String review_content) {
+    public ReviewsRequest(String review_author, String review_content) {
         this.author = review_author;
         this.content = review_content;
     }
