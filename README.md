@@ -1,6 +1,6 @@
 # Popular-Movies-
 
-<img src="https://user-images.githubusercontent.com/35464967/101852481-a156a080-3b55-11eb-9c65-2df7a709e3c0.png" width="150" height="300"> <img src="https://user-images.githubusercontent.com/35464967/101852488-a4519100-3b55-11eb-8b4d-fd38c992d02e.png" width="150" height="300">
+<img src="https://user-images.githubusercontent.com/35464967/101852481-a156a080-3b55-11eb-9c65-2df7a709e3c0.png" width="150" height="300"> <img src="https://user-images.githubusercontent.com/35464967/101852488-a4519100-3b55-11eb-8b4d-fd38c992d02e.png" width="150" height="300"> <img src="https://user-images.githubusercontent.com/35464967/101931939-fd5f0a80-3bd1-11eb-9291-3065fadfc69c.png" width="150" height="300">
 
 The Popular Movies Android app, was made as part of Udacity's Android Developer Nanodegree Program. This app has adaptive UI for phone and tablet devices. 
 It displays the Most Popular and Top Rated Movies. Users can save their favorite movies locally using room database. 
