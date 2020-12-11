@@ -1,4 +1,4 @@
-# Popular-Movies-
+# My-Movie-Hub
 
 <img src="https://user-images.githubusercontent.com/35464967/101852481-a156a080-3b55-11eb-9c65-2df7a709e3c0.png" width="150" height="300"> <img src="https://user-images.githubusercontent.com/35464967/101852488-a4519100-3b55-11eb-8b4d-fd38c992d02e.png" width="150" height="300"> <img src="https://user-images.githubusercontent.com/35464967/101931939-fd5f0a80-3bd1-11eb-9291-3065fadfc69c.png" width="150" height="300">
 
